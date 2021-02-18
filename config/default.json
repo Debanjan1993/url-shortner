@@ -1,0 +1,11 @@
+{
+    "host": "127.0.0.1",
+    "port": "5432",
+    "user": "postgres",
+    "entities": "./src/entity/**/*.ts",
+    "password": "asdf",
+    "db": "url-shortner-dev",
+    "dropSchema": false,
+    "synchronize": true,
+    "baseUrl": "http://localhost:3500/"
+}
