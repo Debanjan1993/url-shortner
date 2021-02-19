@@ -7,78 +7,83 @@ import { Links } from '../entity/Links/Links';
 import { url } from 'inspector';
 import moment from 'moment';
 import { LinkRepository } from '../repository/LinkRepository'
-import { getConnection } from 'typeorm';
+import { Connection, getConnection } from 'typeorm';
 
-const createLinks = async (req: express.Request, res: express.Response) => {
-
-    console.log(`Received request`);
-    const { longUrl } = req.body;
-    const baseUrl = config.get<string>('baseUrl');
-
-    if (!validUrl.isUri(baseUrl)) {
-        return res.sendStatus(401).json('Invalid base url');
+class LinksController {
+    connection: Connection;
+    constructor() {
+        this.connection = getConnection();
     }
 
-    if (!longUrl || !validUrl.isUri(longUrl)) {
-        return res.sendStatus(401).json('Please enter a valid long URI');
-    }
+    createLinks = async (req: express.Request, res: express.Response) => {
 
-    const connection = getConnection();
+        console.log(`Received request`);
+        const { longUrl } = req.body;
+        const baseUrl = config.get<string>('baseUrl');
 
-    try {
-        const linkRepository = connection.getCustomRepository(LinkRepository);
+        if (!validUrl.isUri(baseUrl)) {
+            return res.sendStatus(401).json('Invalid base url');
+        }
 
-        const link = await linkRepository.getLinkByLongUrl(longUrl);
+        if (!longUrl || !validUrl.isUri(longUrl)) {
+            return res.sendStatus(401).json('Please enter a valid long URI');
+        }
 
-        if (link && link.shortUrl) {
+
+        try {
+            const linkRepository = this.connection.getCustomRepository(LinkRepository);
+
+            const link = await linkRepository.getLinkByLongUrl(longUrl);
+
+            if (link && link.shortUrl) {
+                return res.json({
+                    shortURL: link.shortUrl
+                })
+            }
+
+            const urlCode = shortid.generate();
+
+            const newLinkObj = new Links();
+            newLinkObj.code = urlCode;
+            newLinkObj.date = moment().unix();
+            newLinkObj.longUrl = longUrl;
+            newLinkObj.shortUrl = `${baseUrl}${urlCode}`
+
+            await linkRepository.save(newLinkObj);
+
             return res.json({
-                shortURL: link.shortUrl
-            })
+                shortURL: newLinkObj.shortUrl
+            });
+
+        } catch (e) {
+            console.error(`Exception while performing db operations ${e.message}`)
+            return res.status(500).json('Interval Server Error');
         }
 
-        const urlCode = shortid.generate();
+    }
 
-        const newLinkObj = new Links();
-        newLinkObj.code = urlCode;
-        newLinkObj.date = moment().unix();
-        newLinkObj.longUrl = longUrl;
-        newLinkObj.shortUrl = `${baseUrl}${urlCode}`
+    getOriginalLink = async (req: express.Request, res: express.Response) => {
 
-        await linkRepository.save(newLinkObj);
+        const code = req.params.code;
 
-        return res.json({
-            shortURL: newLinkObj.shortUrl
-        });
+        try {
+            const linkRepository = this.connection.getCustomRepository(LinkRepository);
+            const originalLink = await linkRepository.getLongUrlByCode(code);
 
-    } catch (e) {
-        console.error(`Exception while performing db operations ${e.message}`)
-        return res.status(500).json('Interval Server Error');
+            if (!originalLink) {
+                return res.status(404).json('URL not found');
+            }
+
+            res.redirect(originalLink.longUrl);
+
+        } catch (e) {
+            console.error(`Exception while performing db operations ${e.message}`)
+            return res.status(500).json('Interval Server Error');
+        }
+
     }
 
 }
 
-const getOriginalLink = async (req: express.Request, res: express.Response) => {
+export default LinksController;
 
-    const code = req.params.code;
-
-    const connection = getConnection();
-
-    try {
-        const linkRepository = connection.getCustomRepository(LinkRepository);
-        const originalLink = await linkRepository.getLongUrlByCode(code);
-
-        if (!originalLink) {
-            return res.status(404).json('URL not found');
-        }
-
-        res.redirect(originalLink.longUrl);
-
-    } catch (e) {
-        console.error(`Exception while performing db operations ${e.message}`)
-        return res.status(500).json('Interval Server Error');
-    }
-
-
-}
-
-export { createLinks, getOriginalLink };

@@ -1,18 +1,31 @@
-import express from 'express';
-import {createLinks,getOriginalLink} from '../controllers/linksController'
+import express, { Router } from 'express';
+import LinksController from '../controllers/linksController'
 
-const router = express.Router();
 
-router.get('/test',(req,res)=>{
-    res.status(200).json('test successful');
-})
+class Route {
+   router: Router
+   linksController: LinksController
+   constructor() {
+      this.router = express.Router();
+      this.linksController = new LinksController();
+   }
 
-router.get('/:code',async(req,res)=>{
-   await getOriginalLink(req,res);
-})
+   init(app: express.Application) {
+      this.router.get('/test', (req, res) => {
+         res.status(200).json('test successful');
+      })
 
-router.post('/shorten', async (req,res)=>{
-   await createLinks(req,res);
-})
+      this.router.get('/:code', async (req, res) => {
+         await this.linksController.getOriginalLink(req, res);
+      })
 
-export default router;
+      this.router.post('/shorten', async (req, res) => {
+         await this.linksController.createLinks(req, res);
+      })
+
+      app.use('/', this.router);
+   }
+
+}
+
+export default Route;
