@@ -6,6 +6,7 @@ import { Links } from '../entity/Links/Links';
 import moment from 'moment';
 import { LinkRepository } from '../repository/LinkRepository'
 import { Connection, getConnection } from 'typeorm';
+import { UserRepository } from '../repository/UserRepository';
 
 class LinksController {
     connection: Connection;
@@ -41,11 +42,16 @@ class LinksController {
 
             const urlCode = shortid.generate();
 
+
+            const userRepository = this.connection.getCustomRepository(UserRepository);
+            const user = await userRepository.getUserByEmail(req.session.email);
+
             const newLinkObj = new Links();
             newLinkObj.code = urlCode;
             newLinkObj.date = moment().unix();
             newLinkObj.longUrl = longUrl;
-            newLinkObj.shortUrl = `${baseUrl}${urlCode}`
+            newLinkObj.shortUrl = `${baseUrl}${urlCode}`;
+            newLinkObj.userId = user.id;
 
             await linkRepository.save(newLinkObj);
 
