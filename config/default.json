@@ -8,5 +8,6 @@
     "dropSchema": false,
     "synchronize": true,
     "baseUrl": "http://localhost:3500/",
-    "privateKey": "lFOnetwKBsyPAxEv"
+    "privateKey": "lFOnetwKBsyPAxEv",
+    "sessionKey": "xWaLGzbtmbsbLxxF"
 }

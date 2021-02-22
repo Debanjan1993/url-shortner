@@ -1,5 +1,6 @@
-declare namespace Express{
+declare namespace Express {
     export interface Request {
         token?: string
     }
 }
+

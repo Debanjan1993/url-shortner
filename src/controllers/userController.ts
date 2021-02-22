@@ -94,10 +94,22 @@ export default class UsersController {
                 return res.status(500).json('Internal Server Error');
             }
             else {
+                req.session.email = username;
                 return res.status(200).json(token);
             }
         })
 
+    }
+
+    logoutUser = async (req: express.Request, res: express.Response) => {
+        req.session.destroy(err => {
+            if (err) {
+                console.log(`Error logging out ${err}`);
+                return res.status(500).json('Internal Server Error');
+            } else {
+                return res.status(200).json(`Logged out successfully`);
+            }
+        });
     }
 
 }

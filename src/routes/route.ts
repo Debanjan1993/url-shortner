@@ -49,6 +49,10 @@ class Route {
          await this.usersController.verifyUser(req, res);
       })
 
+      this.router.post('/api/logout', async (req, res) => {
+         await this.usersController.logoutUser(req, res);
+      })
+
       this.router.get('/test', (req, res) => {
          res.status(200).json('test successful');
       })
