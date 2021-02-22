@@ -7,5 +7,6 @@
     "db": "url-shortner-dev",
     "dropSchema": false,
     "synchronize": true,
-    "baseUrl": "http://localhost:3500/"
+    "baseUrl": "http://localhost:3500/",
+    "privateKey": "lFOnetwKBsyPAxEv"
 }

@@ -2,9 +2,7 @@ import express from 'express';
 import validUrl from 'valid-url';
 import shortid from 'shortid';
 import config from 'config';
-import connection from '../postgresConnection';
 import { Links } from '../entity/Links/Links';
-import { url } from 'inspector';
 import moment from 'moment';
 import { LinkRepository } from '../repository/LinkRepository'
 import { Connection, getConnection } from 'typeorm';
@@ -22,11 +20,11 @@ class LinksController {
         const baseUrl = config.get<string>('baseUrl');
 
         if (!validUrl.isUri(baseUrl)) {
-            return res.sendStatus(401).json('Invalid base url');
+            return res.status(401).json('Invalid base url');
         }
 
         if (!longUrl || !validUrl.isUri(longUrl)) {
-            return res.sendStatus(401).json('Please enter a valid long URI');
+            return res.status(401).json('Please enter a valid long URI');
         }
 
 
