@@ -3,7 +3,9 @@ import { Connection, getConnection } from 'typeorm';
 import { Users } from '../entity/Users/Users';
 import { UserRepository } from '../repository/UserRepository';
 import moment from 'moment';
-import Crypto from '../crypto/crypto'
+import Crypto from '../crypto/crypto';
+import jwt from 'jsonwebtoken';
+import config from 'config';
 
 export default class UsersController {
     connection: Connection;
@@ -80,7 +82,21 @@ export default class UsersController {
             return res.status(401).json('The password entered is not correct');
         }
 
-        return res.status(200).json('Valid User');
+        const jwtbody = {
+            username,
+            password
+        }
+        const privateKey = config.get<string>('privateKey')
+
+        jwt.sign({ jwtbody: jwtbody }, privateKey, (err: any, token: any) => {
+            if (err) {
+                console.log(`Unable to generate token ${err}`)
+                return res.status(500).json('Internal Server Error');
+            }
+            else {
+                return res.status(200).json(token);
+            }
+        })
 
     }
 

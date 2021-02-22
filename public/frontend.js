@@ -47,7 +47,10 @@ function login() {
         body: JSON.stringify(obj)
     }).then(res => {
         if (res.status === 200) {
-            window.location.href = '/dashboard'
+            res.json().then(token => {
+                document.cookie = `authorization=Bearer ${token}`;
+                window.location.href = '/dashboard';
+            });
         } else {
             res.json().then(json => alert(json));
         }

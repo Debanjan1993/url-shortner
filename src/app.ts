@@ -4,13 +4,14 @@ import bodyParser from 'body-parser';
 import Route from './routes/route'
 import connectToDb from './postgresConnection';
 import path from 'path';
+import cookieParser from 'cookie-parser';
 
 (async function () {
 
     const app = express();
     const port = process.env.PORT || 3500;
 
-
+    app.use(cookieParser())
     app.use(bodyParser.json());
     app.use(express.static(path.join(__dirname + '../../public/')));
 
