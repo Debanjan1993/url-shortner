@@ -1,4 +1,5 @@
-import { Entity, Column,PrimaryColumn } from 'typeorm';
+import { Entity, Column,PrimaryColumn, ManyToOne, RelationId,PrimaryGeneratedColumn } from 'typeorm';
+import { Users } from '../Users/Users';
 
 @Entity('links')
 export class Links {
@@ -16,4 +17,11 @@ export class Links {
 
     @Column({ nullable: true })
     date: number;
+
+    @RelationId((r:Links)=> r.user)
+    @Column()
+    userId: number;
+
+    @ManyToOne(type=> Users, users=> users.links)
+    user: Users;
 }

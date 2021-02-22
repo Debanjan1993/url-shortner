@@ -1,19 +1,27 @@
-import { Entity, Column, PrimaryColumn } from 'typeorm';
+import { type } from 'os';
+import { Entity, Column, PrimaryColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Links } from '../Links/Links';
 
 @Entity('users')
 export class Users {
     constructor() { }
 
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @Column()
     username: string;
 
-    @Column({ nullable: true })
+    @Column()
     email: string;
 
-    @Column({ nullable: true })
+    @Column()
     password: string;
 
-    @Column({ nullable: true })
+    @Column()
     dateOfJoining: number;
+
+    @OneToMany(type => Links, links => links.user)
+    links: Links[];
 
 }

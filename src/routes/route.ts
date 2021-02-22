@@ -53,6 +53,10 @@ class Route {
          await this.usersController.logoutUser(req, res);
       })
 
+      this.router.get('/api/userDetails', async (req, res) => {
+         await this.usersController.getUserDetails(req, res);
+      })
+
       this.router.get('/test', (req, res) => {
          res.status(200).json('test successful');
       })

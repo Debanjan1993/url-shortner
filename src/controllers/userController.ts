@@ -2,6 +2,7 @@ import express from 'express';
 import { Connection, getConnection } from 'typeorm';
 import { Users } from '../entity/Users/Users';
 import { UserRepository } from '../repository/UserRepository';
+import { LinkRepository } from '../repository/LinkRepository'
 import moment from 'moment';
 import Crypto from '../crypto/crypto';
 import jwt from 'jsonwebtoken';
@@ -110,6 +111,26 @@ export default class UsersController {
                 return res.status(200).json(`Logged out successfully`);
             }
         });
+    }
+
+    getUserDetails = async (req: express.Request, res: express.Response) => {
+
+        const email = req.session.email;
+        const userRepository = this.connection.getCustomRepository(UserRepository);
+        const linksRepository = this.connection.getCustomRepository(LinkRepository);
+
+        const user = await userRepository.getUserByEmail(email);
+        const userlinks = await linksRepository.getLinksByUser(user as Users);
+
+        const obj = {
+            links: userlinks[0],
+            count: userlinks[1],
+            username: user.username,
+            email: user.email
+        }
+
+        return res.status(200).json(obj);
+
     }
 
 }
