@@ -4,7 +4,8 @@
     "description": "",
     "main": "app.js",
     "scripts": {
-        "start": "ts-node src/app.ts"
+        "start": "ts-node src/app.ts",
+        "startpoll": "ts-node src/serverDbJob.ts"
     },
     "keywords": [],
     "author": "",
@@ -14,6 +15,7 @@
         "body-parser": "^1.19.0",
         "config": "^3.3.3",
         "cookie-parser": "^1.4.5",
+        "cron": "^1.8.2",
         "express": "^4.17.1",
         "express-session": "^1.17.1",
         "jsonwebtoken": "^8.5.1",
@@ -29,6 +31,7 @@
         "@types/bcrypt": "^3.0.0",
         "@types/config": "0.0.38",
         "@types/cookie-parser": "^1.4.2",
+        "@types/cron": "^1.7.2",
         "@types/express": "^4.17.11",
         "@types/express-session": "^1.17.3",
         "@types/jsonwebtoken": "^8.5.0",
