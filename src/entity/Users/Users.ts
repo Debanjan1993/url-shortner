@@ -21,6 +21,9 @@ export class Users {
     @Column()
     dateOfJoining: number;
 
+    @Column()
+    isPaidUser: boolean = false;
+
     @OneToMany(type => Links, links => links.user)
     links: Links[];
 
