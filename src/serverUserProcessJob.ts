@@ -1,5 +1,5 @@
 import { CronJob } from 'cron';
-import DatabasePoll from './jobs/databasePoll';
+import UserProcess from './jobs/userProcess';
 import connectToDb from './postgresConnection';
 import { connectToQueueServer } from './queueService/queueConnection';
 
@@ -9,9 +9,8 @@ import { connectToQueueServer } from './queueService/queueConnection';
     await connectToQueueServer();
     await connectToDb();
 
-    //0 */5 * * * *
     const job = new CronJob('*/10 * * * * *', async () => {
-        await new DatabasePoll().run();
+        await new UserProcess().run();
     }, () => {
         console.log(`Database Poll Job Completed`)
     }, true)
