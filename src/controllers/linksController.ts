@@ -48,7 +48,7 @@ class LinksController {
 
             const newLinkObj = new Links();
             newLinkObj.code = urlCode;
-            newLinkObj.date = moment().unix();
+            newLinkObj.date = moment().format("DD-MM-YYYY");
             newLinkObj.longUrl = longUrl;
             newLinkObj.shortUrl = `${baseUrl}${urlCode}`;
             newLinkObj.userId = user.id;

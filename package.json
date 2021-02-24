@@ -5,12 +5,14 @@
     "main": "app.js",
     "scripts": {
         "start": "ts-node src/app.ts",
-        "startpoll": "ts-node src/serverDbJob.ts"
+        "startpoll": "ts-node src/serverDbJob.ts",
+        "processuser": "ts-node src/serverUserProcessJob.ts"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "amqplib": "^0.7.0",
         "bcrypt": "^5.0.0",
         "body-parser": "^1.19.0",
         "config": "^3.3.3",
@@ -28,6 +30,7 @@
         "valid-url": "^1.0.9"
     },
     "devDependencies": {
+        "@types/amqplib": "^0.5.17",
         "@types/bcrypt": "^3.0.0",
         "@types/config": "0.0.38",
         "@types/cookie-parser": "^1.4.2",
