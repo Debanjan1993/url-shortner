@@ -1,27 +1,33 @@
-import { Entity, Column,PrimaryColumn, ManyToOne, RelationId,PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, RelationId, PrimaryGeneratedColumn, Index } from 'typeorm';
 import { Users } from '../Users/Users';
 
 @Entity('links')
 export class Links {
 
-    constructor(){}
+    constructor() { }
 
-    @PrimaryColumn() 
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @Column()
     longUrl: string;
 
-    @Column({ nullable: true })
+    @Column()
     shortUrl: string;
 
-    @Column({ nullable: true })
+    @Column()
     code: string;
 
-    @Column({ nullable: true })
-    date: number;
+    @Column()
+    date: string;
 
-    @RelationId((r:Links)=> r.user)
+    @Column({ nullable: true, default: false })
+    isDisabled: boolean;
+
+    @RelationId((r: Links) => r.user)
     @Column()
     userId: number;
 
-    @ManyToOne(type=> Users, users=> users.links)
+    @ManyToOne(type => Users, users => users.links)
     user: Users;
 }

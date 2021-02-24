@@ -30,4 +30,13 @@ export class LinkRepository extends Repository<Links>{
         })
     }
 
+    async updateLinkStatus(link: Links) {
+        return this.update({
+            id: link.id,
+            code: link.code
+        }, {
+            isDisabled: link.isDisabled
+        })
+    }
+
 }

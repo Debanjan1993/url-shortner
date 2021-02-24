@@ -6,7 +6,7 @@
     "scripts": {
         "start": "ts-node src/app.ts",
         "startpoll": "ts-node src/serverDbJob.ts",
-        "processUser": "ts-node src/serverUserProcessJob.ts"
+        "processuser": "ts-node src/serverUserProcessJob.ts"
     },
     "keywords": [],
     "author": "",
