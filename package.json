@@ -6,7 +6,8 @@
     "scripts": {
         "start": "ts-node src/app.ts",
         "startpoll": "ts-node src/serverDbJob.ts",
-        "processuser": "ts-node src/serverUserProcessJob.ts"
+        "processuser": "ts-node src/serverUserProcessJob.ts",
+        "emailuser": "ts-node src/serverMailJob.ts"
     },
     "keywords": [],
     "author": "",
@@ -23,9 +24,10 @@
         "jsonwebtoken": "^8.5.1",
         "moment": "^2.29.1",
         "mysql": "^2.14.1",
+        "nanoid": "^3.1.20",
+        "nodemailer": "^6.4.18",
         "pg": "^8.5.1",
         "reflect-metadata": "^0.1.10",
-        "shortid": "^2.2.16",
         "typeorm": "0.2.31",
         "valid-url": "^1.0.9"
     },
@@ -39,7 +41,7 @@
         "@types/express-session": "^1.17.3",
         "@types/jsonwebtoken": "^8.5.0",
         "@types/node": "^8.0.29",
-        "@types/shortid": "0.0.29",
+        "@types/nodemailer": "^6.4.0",
         "@types/valid-url": "^1.0.3",
         "ts-node": "^3.3.0",
         "typescript": "3.3.3333"

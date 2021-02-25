@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, RelationId, PrimaryGeneratedColumn, Index } from 'typeorm';
+import { Entity, Column, ManyToOne, RelationId, PrimaryGeneratedColumn, Index, Unique } from 'typeorm';
 import { Users } from '../Users/Users';
 
 @Entity('links')
@@ -15,6 +15,7 @@ export class Links {
     @Column()
     shortUrl: string;
 
+    @Index()
     @Column()
     code: string;
 
