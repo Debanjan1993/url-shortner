@@ -1,6 +1,6 @@
 import express from 'express';
 import validUrl from 'valid-url';
-import shortid from 'shortid';
+import { nanoid } from 'nanoid';
 import config from 'config';
 import { Links } from '../entity/Links/Links';
 import moment from 'moment';
@@ -28,20 +28,10 @@ class LinksController {
             return res.status(401).json('Please enter a valid long URI');
         }
 
-
         try {
             const linkRepository = this.connection.getCustomRepository(LinkRepository);
 
-            const link = await linkRepository.getLinkByLongUrl(longUrl);
-
-            if (link && link.shortUrl) {
-                return res.json({
-                    shortURL: link.shortUrl
-                })
-            }
-
-            const urlCode = shortid.generate();
-
+            const urlCode = await this.generateURLCode(linkRepository);
 
             const userRepository = this.connection.getCustomRepository(UserRepository);
             const user = await userRepository.getUserByEmail(req.session.email);
@@ -85,6 +75,16 @@ class LinksController {
             return res.status(500).json('Interval Server Error');
         }
 
+    }
+
+    private generateURLCode = async (linkRepository: LinkRepository): Promise<string> => {
+        const urlCode = nanoid(7);
+        const url = await linkRepository.getLongUrlByCode(urlCode);
+        if (url) {
+            return await this.generateURLCode(linkRepository);
+        } else {
+            return urlCode;
+        }
     }
 
 }

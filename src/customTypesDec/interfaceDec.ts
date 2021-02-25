@@ -3,4 +3,9 @@ interface UserMessage {
     username: string
 }
 
-export { UserMessage };
+interface EmailObj {
+    email: string
+    links: string[]
+}
+
+export { UserMessage, EmailObj };

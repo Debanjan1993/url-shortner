@@ -9,5 +9,7 @@
     "synchronize": true,
     "baseUrl": "http://localhost:3500/",
     "privateKey": "lFOnetwKBsyPAxEv",
-    "sessionKey": "xWaLGzbtmbsbLxxF"
+    "sessionKey": "xWaLGzbtmbsbLxxF",
+    "emailUsername": "debanjan.dey999@gmail.com",
+    "emailPassword": "haripotter11"
 }
