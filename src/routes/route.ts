@@ -30,15 +30,8 @@ class Route {
          res.sendFile(path.join(__dirname + '../../../public/' + 'login.html'));
       })
 
-      this.router.get('/dashboard', this.middleware.verifyToken, (req, res) => {
-         jwt.verify(req.token as string, config.get('privateKey'), (err, decoded) => {
-            if (err) {
-               return res.status(401).json('Authentication failed please sign in again');
-            } else {
-               return res.sendFile(path.join(__dirname + '../../../public/' + 'dashboard.html'));
-            }
-         });
-
+      this.router.get('/dashboard', this.middleware.verifyToken, this.middleware.verifyRoute, (req, res) => {
+         res.sendFile(path.join(__dirname + '../../../public/' + 'dashboard.html'));
       })
 
       this.router.post('/api/signup', async (req, res) => {
@@ -53,7 +46,7 @@ class Route {
          await this.usersController.logoutUser(req, res);
       })
 
-      this.router.get('/api/userDetails', async (req, res) => {
+      this.router.get('/api/userDetails', this.middleware.verifyToken, this.middleware.verifyRoute, async (req, res) => {
          await this.usersController.getUserDetails(req, res);
       })
 
@@ -65,7 +58,7 @@ class Route {
          await this.linksController.getOriginalLink(req, res);
       })
 
-      this.router.post('/shorten', async (req, res) => {
+      this.router.post('/shorten', this.middleware.verifyToken, this.middleware.verifyRoute, async (req, res) => {
          await this.linksController.createLinks(req, res);
       })
 
