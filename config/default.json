@@ -1,4 +1,5 @@
 {
+    "mode": "development",
     "host": "127.0.0.1",
     "port": "5432",
     "user": "postgres",
@@ -11,5 +12,8 @@
     "privateKey": "lFOnetwKBsyPAxEv",
     "sessionKey": "xWaLGzbtmbsbLxxF",
     "emailUsername": "debanjan.dey999@gmail.com",
-    "emailPassword": "haripotter11"
+    "emailPassword": "haripotter11",
+    "redis": {
+        "url": "redis://localhost:6379/2"
+    }
 }
