@@ -2,7 +2,7 @@ import { ch } from './queueConnection';
 
 const publishToQueue = async (routingKey: string, data: any): Promise<boolean> => {
     try {
-        const isSent = ch.publish('test_url', 'db_mail_users_test_key', data, { persistent: true });
+        const isSent = ch.publish('test_url', 'db_confirmation_mail_test_key', data, { persistent: true });
         console.log(`isSent : ${isSent}`)
         return isSent
     } catch (e) {

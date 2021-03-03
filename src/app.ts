@@ -9,6 +9,8 @@ import session from 'express-session';
 import config from 'config';
 import pg from 'pg';
 import connectPgSimple from 'connect-pg-simple';
+import { connectToQueueServer } from './queueService/queueConnection';
+
 
 (async function () {
 
@@ -36,6 +38,7 @@ import connectPgSimple from 'connect-pg-simple';
         saveUninitialized: false,
     }));
 
+    await connectToQueueServer();
     await connectToDb();
     const route = new Route();
     route.init(app);

@@ -24,6 +24,9 @@ export class Users {
     @Column()
     isPaidUser: boolean = false;
 
+    @Column()
+    isVerified: boolean = false
+
     @OneToMany(type => Links, links => links.user)
     links: Links[];
 

@@ -1,5 +1,5 @@
 import { Connection, getConnection } from "typeorm";
-import { EmailObj } from '../customTypesDec/interfaceDec';
+import { EmailObj, ConfirmationEmail } from '../customTypesDec/interfaceDec';
 import { transporter } from '../mailTransporter';
 import config from 'config';
 
@@ -12,11 +12,11 @@ class EmailJob {
     }
 
     run = async (emailObj: EmailObj) => {
+        console.log(`Link Deactivatation email job started for user ${emailObj.email}`);
         const email = emailObj.email
         const links = emailObj.links.join(',')
         const url = `${config.get<string>("baseUrl")}login`
 
-        console.log(`Sending mail to user ${email}`);
         const info = await transporter.sendMail({
 
             from: '"URL Shortner Pvt Ltd" <debanjan.dey999@gmail.com>',
@@ -27,7 +27,29 @@ class EmailJob {
 
         })
 
-        console.log(info.messageId)
+        console.log(info.messageId);
+        console.log(`Link Deactivatation email job ended for user ${emailObj.email}`);
+    }
+
+    confirmationMail = async (emailObj: ConfirmationEmail) => {
+        console.log(`Cofirmation email job started for user ${emailObj.email}`);
+        const email = emailObj.email;
+        const code = emailObj.code;
+        const url = `${config.get<string>("baseUrl")}confirmation/${code}`;
+
+        console.log(`Sending mail to user ${email}`);
+        const info = await transporter.sendMail({
+
+            from: '"URL Shortner Pvt Ltd" <debanjan.dey999@gmail.com>',
+            to: email,
+            subject: `Account Confirmation Mail`,
+            text: `Please click on the link below to confirm your account`,
+            html: `<a href="${url}">Link</a>`,
+
+        })
+
+        console.log(info.messageId);
+        console.log(`Cofirmation email job ended for user ${emailObj.email}`);
     }
 
 }

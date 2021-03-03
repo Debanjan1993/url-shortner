@@ -15,5 +15,6 @@
     "emailPassword": "haripotter11",
     "redis": {
         "url": "redis://localhost:6379/2"
-    }
+    },
+    "encryptionKey": "3NwE9tZsS1UaeW6A"
 }

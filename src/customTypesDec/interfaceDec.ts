@@ -8,4 +8,9 @@ interface EmailObj {
     links: string[]
 }
 
-export { UserMessage, EmailObj };
+interface ConfirmationEmail {
+    email: string
+    code: string
+}
+
+export { UserMessage, EmailObj, ConfirmationEmail };

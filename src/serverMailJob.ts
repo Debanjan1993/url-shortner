@@ -11,12 +11,16 @@ import { enableTransporter } from './mailTransporter';
     await enableTransporter();
 
 
-    const job = new CronJob('*/20 * * * * *', async () => {
+    new CronJob('*/20 * * * * *', async () => {
         await new ConsumeProcessor().userMail();
     }, () => {
         console.log(`User Mail Job Completed`)
     }, true)
 
-    job.start();
+    new CronJob('*/20 * * * * *', async () => {
+        await new ConsumeProcessor().confirmationMail();
+    }, () => {
+        console.log(`Confirmation Mail Job Completed`)
+    }, true)
 
 })();
