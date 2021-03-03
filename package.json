@@ -7,7 +7,8 @@
         "start": "ts-node src/app.ts",
         "startpoll": "ts-node src/serverDbJob.ts",
         "processuser": "ts-node src/serverUserProcessJob.ts",
-        "emailuser": "ts-node src/serverMailJob.ts"
+        "emailuser": "ts-node src/serverMailJob.ts",
+        "tsc": "tsc"
     },
     "keywords": [],
     "author": "",
