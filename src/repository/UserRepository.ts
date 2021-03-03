@@ -30,4 +30,13 @@ export class UserRepository extends Repository<Users>{
         })
     }
 
+    async updateUserStatus(user: Users) {
+        return this.update({
+            id: user.id,
+            email: user.email
+        }, {
+            isVerified: user.isVerified
+        })
+    }
+
 }

@@ -62,6 +62,10 @@ class Route {
          await this.linksController.createLinks(req, res);
       })
 
+      this.router.get('/confirmation/:code', async (req, res) => {
+         await this.usersController.getUserConfirmation(req, res);
+      })
+
       app.use('/', this.router);
    }
 

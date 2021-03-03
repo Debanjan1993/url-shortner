@@ -7,10 +7,14 @@ import moment from 'moment';
 import Crypto from '../crypto/crypto';
 import jwt from 'jsonwebtoken';
 import config from 'config';
+import CryptoJS from 'crypto-js';
+import publishToQueue from '../queueService/publish';
+import { ConfirmationEmail } from '../customTypesDec/interfaceDec';
 
 export default class UsersController {
     connection: Connection;
     crypto: Crypto;
+    routingRoute: 'db_confirmation_mail_test_key';
     constructor() {
         this.connection = getConnection();
         this.crypto = new Crypto();
@@ -45,6 +49,7 @@ export default class UsersController {
         }
 
         const hashedPassword = await this.crypto.createCrypt(password);
+        const hashedEmail = await this.crypto.createCrypt(email);
 
         const user = new Users();
 
@@ -52,9 +57,22 @@ export default class UsersController {
         user.email = email;
         user.password = hashedPassword;
         user.dateOfJoining = moment().unix();
+        user.isVerified = false;
 
         await userRepository.save(user);
 
+        const encryptedEmail = await this.encryptEmail(user.email);
+        console.log(`Publishing message to confirmation email queue for email ${user.email}`);
+
+        const emailObj: ConfirmationEmail = {
+            email: user.email,
+            code: encodeURIComponent(encryptedEmail)
+        }
+
+        const isSent = publishToQueue(this.routingRoute, Buffer.from(JSON.stringify(emailObj)));
+        if (!isSent) {
+            console.log(`Unable to put user ${emailObj.email} in the confirmation email queue`);
+        }
         return res.status(201).json('User created');
 
     }
@@ -131,6 +149,33 @@ export default class UsersController {
 
         return res.status(200).json(obj);
 
+    }
+
+    getUserConfirmation = async (req: express.Request, res: express.Response) => {
+        
+        const code = decodeURIComponent(req.params.code);
+        const email = await this.decryptEmail(code);
+
+        const userRepository = this.connection.getCustomRepository(UserRepository);
+
+        const user = await userRepository.getUserByEmail(email);
+        user.isVerified = true;
+
+        await userRepository.updateUserStatus(user);
+
+        res.redirect('/login');
+
+    }
+
+    encryptEmail = async (email: string) => {
+        const cipherText = CryptoJS.AES.encrypt(email, config.get<string>("encryptionKey")).toString();
+        return cipherText;
+    }
+
+    decryptEmail = async (code: string) => {
+        const bytes = CryptoJS.AES.decrypt(code, config.get<string>("encryptionKey"));
+        const email = bytes.toString(CryptoJS.enc.Utf8);
+        return email;
     }
 
 }
