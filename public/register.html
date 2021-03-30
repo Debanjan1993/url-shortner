@@ -10,14 +10,36 @@
 </head>
 
 <body>
-
-    <h1>Sign Up Form</h1>
-
-    <input id="name" type="text" placeholder="enter name" name="name" value="" required>
-    <input id="email" type="text" placeholder="enter email" required>
-    <input id="password" type="password" placeholder="enter password" required>
-    <input id="password2" type="password" placeholder="confirm password" required>
-    <button id="signupbtn" onclick="sendSignUpData()">SIGN UP</button>
+    <div class="center">
+        <h1>Sign Up</h1>
+        <div class="form">
+            <div class="txt_fields">
+                <input id="name" type="text" required>
+                <span></span>
+                <label>Name</label>
+            </div>
+            <div class="txt_fields">
+                <input id="username" type="text" required>
+                <span></span>
+                <label>Username</label>
+            </div>
+            <div class="txt_fields">
+                <input id="password" type="password" required>
+                <span></span>
+                <label>Password</label>
+            </div>
+            <div class="txt_fields">
+                <input id="confirmPassword" type="password" required>
+                <span></span>
+                <label>Confirm Password</label>
+            </div>
+            <input type="submit" id="loginbtn" onclick="sendSignUpData()" value="LOGIN">
+            <div class="signup_link">
+                Already a member?
+                <a href="/login">Login</a>
+            </div>
+        </div>
+    </div>
 
     <script src="./frontend.js"></script>
 </body>
