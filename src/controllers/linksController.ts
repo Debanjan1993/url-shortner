@@ -87,6 +87,25 @@ class LinksController {
         }
     }
 
+    deleteLink = async (req: express.Request, res: express.Response) => {
+        try {
+            const email = req.session.email;
+            const { link } = req.body;
+
+            const userRepository = this.connection.getCustomRepository(UserRepository);
+            const linkRepository = this.connection.getCustomRepository(LinkRepository);
+
+            const user = await userRepository.getUserByEmail(email);
+            await linkRepository.deleteLinkByUser(user, link);
+
+            res.status(200).json('Link deleted');
+
+        } catch (e) {
+            console.error(`Exception while deleting link from DB ${e.message}`);
+            return res.status(500).json('Internal Server Error');
+        }
+    }
+
 }
 
 export default LinksController;

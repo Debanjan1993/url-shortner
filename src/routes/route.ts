@@ -34,6 +34,10 @@ class Route {
          res.sendFile(path.join(__dirname + '../../../public/' + 'dashboard.html'));
       })
 
+      this.router.get('/account', this.middleware.verifyToken, this.middleware.verifyRoute, (req, res) => {
+         res.sendFile(path.join(__dirname + '../../../public/' + 'account.html'));
+      })
+
       this.router.post('/api/signup', async (req, res) => {
          await this.usersController.addUser(req, res);
       })
@@ -60,6 +64,10 @@ class Route {
 
       this.router.post('/shorten', this.middleware.verifyToken, this.middleware.verifyRoute, async (req, res) => {
          await this.linksController.createLinks(req, res);
+      })
+
+      this.router.post('/api/deleteLink', this.middleware.verifyToken, this.middleware.verifyRoute, async (req, res) => {
+         await this.linksController.deleteLink(req, res);
       })
 
       this.router.get('/confirmation/:code', async (req, res) => {
