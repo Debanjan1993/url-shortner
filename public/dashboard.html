@@ -5,12 +5,58 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://fonts.googleapis.com/css?family=Arvo' rel='stylesheet'>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link rel="stylesheet" href="./dash.css">
     <title>Dashboard</title>
 </head>
 
 <body>
-    <h1>Welcome to the dashboard</h1>
-    <button id="logoutbtn" onclick="logout()">LOGOUT</button>
+    <div id="app">
+        <div id="sidebar">
+            <div id="header">
+                URL Shortner Pvt Limited
+            </div>
+            <div id="user">
+                <span id="dot">●</span>
+            </div>
+            <div id="account">
+                <input id="inputAccount" type="submit" onclick="account()" value="Account" />
+            </div>
+            <div id="logout">
+                <input id="inputLogout" type="submit" onclick="logout()" value="Logout" />
+            </div>
+        </div>
+        <div id="main">
+            <div id="main-head">
+                <h1>Dashboard</h1>
+            </div>
+            <div id="main-input">
+                <input id="inputMain" placeholder="Enter the URL" type="text" v-model="link" size="50">
+            </div>
+            <div id="main-add">
+                <input id="inputSub" type="submit" onclick="addLink()" value="ADD LINK" />
+            </div>
+            <div id="table">
+                <table class="table table-bordered table-dark">
+                    <thead class="table-head">
+                        <tr>
+                            <th scope="col">Long URL</th>
+                            <th scope="col">Short URL</th>
+                            <th scope="col">Delete</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+
+
+
+        </div>
+    </div>
+
     <script src="./dashboard.js"></script>
 
 </body>

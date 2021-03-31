@@ -39,4 +39,11 @@ export class LinkRepository extends Repository<Links>{
         })
     }
 
+    async deleteLinkByUser(user: Users, link: string) {
+        return await this.delete({
+            userId: user.id,
+            shortUrl: link
+        })
+    }
+
 }
