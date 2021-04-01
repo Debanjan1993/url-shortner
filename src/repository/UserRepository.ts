@@ -31,11 +31,21 @@ export class UserRepository extends Repository<Users>{
     }
 
     async updateUserStatus(user: Users) {
-        return this.update({
+        return await this.update({
             id: user.id,
             email: user.email
         }, {
             isVerified: user.isVerified
+        })
+    }
+
+    async updateUserInfo(originalEmail: string, user: Partial<Users>) {
+        return await this.update({
+            email: originalEmail
+        }, {
+            username: user.username,
+            email: user.email,
+            password: user.password,
         })
     }
 

@@ -54,6 +54,10 @@ class Route {
          await this.usersController.getUserDetails(req, res);
       })
 
+      this.router.post('/api/updateInfo', this.middleware.verifyToken, this.middleware.verifyRoute, async (req, res) => {
+         await this.usersController.updateUserInfo(req, res);
+      })
+
       this.router.get('/test', (req, res) => {
          res.status(200).json('test successful');
       })
