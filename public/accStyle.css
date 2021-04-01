@@ -104,7 +104,8 @@ body {
     transition: ease-in 0.5s;
 }
 
-#inputName {
+#inputName,
+#inputEmail {
     width: 100%;
     height: 100%;
     background: transparent;
@@ -114,7 +115,8 @@ body {
     color: #fff;
 }
 
-#inputSub {
+#inputSub,
+#inputSubTemp {
     width: 100%;
     height: 100%;
     cursor: pointer;
@@ -123,6 +125,7 @@ body {
     outline: none;
     border: none;
     font-size: 12px;
+    text-align: center;
 }
 
 #inputSub:hover {

@@ -151,8 +151,53 @@ export default class UsersController {
 
     }
 
+    updateUserInfo = async (req: express.Request, res: express.Response) => {
+
+        const originalEmail = req.session.email;
+
+        const { name, email, password, password2 } = req.body;
+
+        if (!name) {
+            return res.status(400).json('Please enter the name');
+        }
+        if (!email) {
+            return res.status(400).json('Please enter the email');
+        }
+        if (!password) {
+            return res.status(400).json('Please enter the password');
+        }
+        if (!password2) {
+            return res.status(400).json('Please confirm the password by entering again');
+        }
+
+        if (password !== password2) {
+            return res.status(400).json('The password entered do not match with each other');
+        }
+
+        const userRepository = this.connection.getCustomRepository(UserRepository);
+
+        if (originalEmail !== email) {
+            const userExist = await userRepository.getUserByEmail(email);
+            if (userExist) {
+                return res.status(400).json('User with this email already exists');
+            }
+        }
+
+        const hashedPassword = await this.crypto.createCrypt(password);
+
+        const user: Partial<Users> = {
+            username: name,
+            email: email,
+            password: hashedPassword
+        }
+
+        await userRepository.updateUserInfo(originalEmail, user);
+
+        return res.status(200).json('User Info Updated');
+    }
+
     getUserConfirmation = async (req: express.Request, res: express.Response) => {
-        
+
         const code = decodeURIComponent(req.params.code);
         const email = await this.decryptEmail(code);
 
