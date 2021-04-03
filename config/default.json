@@ -1,9 +1,9 @@
 {
     "mode": "development",
-    "host": "127.0.0.1",
+    "host": "host",
     "port": "5432",
     "user": "postgres",
-    "entities": "./src/entity/**/*.ts",
+    "entities": "./dist/entity/**/*.js",
     "password": "asdf",
     "db": "url-shortner-dev",
     "dropSchema": false,

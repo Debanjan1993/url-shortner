@@ -8,6 +8,10 @@
         "startpoll": "ts-node src/serverDbJob.ts",
         "processuser": "ts-node src/serverUserProcessJob.ts",
         "emailuser": "ts-node src/serverMailJob.ts",
+        "prod-start": "node dist/app.js",
+        "prod-startpoll": "node dist/serverDbJob.js",
+        "prod-processuser": "node dist/serverUserProcessJob.js",
+        "prod-emailuser": "node dist/serverMailJob.js",
         "tsc": "tsc"
     },
     "keywords": [],
