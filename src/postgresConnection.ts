@@ -16,7 +16,7 @@ async function connectToDb() {
         logging: false,
         dropSchema: false,
         entities: [
-            "./src/entity/**/*.ts"
+            "./dist/entity/**/*.js"
         ]
     };
 
