@@ -46,6 +46,7 @@ jobs:
             mv /tmp/docker/* /usr/bin
 
       - run: apk add sudo
+      - run: systemctl start docker 
       - run: sudo docker build -t url:latest -f Dockerfile-start .
       - run: aws ecr get-login-password --region us-east-1 | sudo docker login --username AWS --password-stdin 665070863530.dkr.ecr.us-east-1.amazonaws.com
       - run: sudo docker tag url:latest 665070863530.dkr.ecr.us-east-1.amazonaws.com/url_shortner:latest
