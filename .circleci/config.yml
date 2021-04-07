@@ -13,19 +13,12 @@ jobs:
 
   deploy_master_app:
     docker:
-      - image: node:11-alpine
+      - image: ubuntu:18.04
     steps:
       - checkout
-      - run:
-          name: Installing AWS CLI
-          command: |
-             apk add --no-cache \
-                 python3 \
-                 py3-pip \
-             && pip3 install --upgrade pip \
-             && pip3 install \
-                awscli \
-             && rm -rf /var/cache/apk/*
+      - run: sudo apt-get update
+      - run: sudo apt-get install awscli
+      - run: aws --version
 
       - run:
           name: Configuring AWS
@@ -35,17 +28,10 @@ jobs:
             aws configure set region us-east-1
             aws --version
 
-      - run: apk add docker
-      - run: apk add openrc
-      - run: apk update
-      - run: rc-update add docker boot
-      # - run: service docker start
-      # - run: service docker status  
-         
-      - run: apk add sudo
-      # - run: service docker start
-      - run: sudo chmod 757 /var/run/docker.sock
-      - run: sudo docker run --privileged=true -v /var/run/docker.sock:/var/run/docker.sock -it ...
+      - run: sudo apt install docker.io
+      - run: sudo systemctl start docker
+      - run: sudo systemctl enable docker
+      - run: docker --version
       - run: sudo docker build -t url:latest -f Dockerfile-start .
       - run: aws ecr get-login-password --region us-east-1 | sudo docker login --username AWS --password-stdin 665070863530.dkr.ecr.us-east-1.amazonaws.com
       - run: sudo docker tag url:latest 665070863530.dkr.ecr.us-east-1.amazonaws.com/url_shortner:latest
