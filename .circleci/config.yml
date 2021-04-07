@@ -45,11 +45,11 @@ jobs:
             tar -xz -C /tmp -f /tmp/docker-$VER.tgz
             mv /tmp/docker/* /usr/bin
 
-      - run: su -
-      - run: docker build -t url:latest -f Dockerfile-start .
-      - run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 665070863530.dkr.ecr.us-east-1.amazonaws.com
-      - run: docker tag url:latest 665070863530.dkr.ecr.us-east-1.amazonaws.com/url_shortner:latest
-      - run: docker push 665070863530.dkr.ecr.us-east-1.amazonaws.com/url_shortner:latest       
+      - run: apk add sudo
+      - run: sudo docker build -t url:latest -f Dockerfile-start .
+      - run: aws ecr get-login-password --region us-east-1 | sudo docker login --username AWS --password-stdin 665070863530.dkr.ecr.us-east-1.amazonaws.com
+      - run: sudo docker tag url:latest 665070863530.dkr.ecr.us-east-1.amazonaws.com/url_shortner:latest
+      - run: sudo docker push 665070863530.dkr.ecr.us-east-1.amazonaws.com/url_shortner:latest       
 
 workflows:
   version: 2
