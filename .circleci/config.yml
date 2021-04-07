@@ -28,6 +28,7 @@ jobs:
             aws configure set region us-east-1
             aws --version
 
+      - run: apt-get install sudo -y
       - run: sudo apt install docker.io
       - run: sudo systemctl start docker
       - run: sudo systemctl enable docker
