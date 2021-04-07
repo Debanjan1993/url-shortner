@@ -36,6 +36,12 @@ jobs:
             aws --version
 
       - run:
+          name: Install Docker
+          command: |
+            apk add --update docker openrc
+            rc-update add docker boot
+
+      - run:
           name: Sending Docker images to ECR
           command: |
             docker build -t url:latest -f Dockerfile-start .
