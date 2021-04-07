@@ -48,6 +48,7 @@ jobs:
       - run:
           name: Sending Docker images to ECR
           command: |
+            su -
             docker build -t url:latest -f Dockerfile-start .
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 665070863530.dkr.ecr.us-east-1.amazonaws.com
             docker tag url:latest 665070863530.dkr.ecr.us-east-1.amazonaws.com/url_shortner:latest
