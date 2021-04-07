@@ -38,14 +38,15 @@ jobs:
       - run:
           name: Install Docker
           command: |
-            apk add --update docker openrc
-            service docker start
-            service docker status
+            set -x
+            VER="18.06.3-ce"
+            curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
+            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+            mv /tmp/docker/* /usr/bin
 
       - run:
           name: Sending Docker images to ECR
           command: |
-            set -ex && apk --no-cache add sudo
             sudo docker build -t url:latest -f Dockerfile-start .
             aws ecr get-login-password --region us-east-1 | sudo docker login --username AWS --password-stdin 665070863530.dkr.ecr.us-east-1.amazonaws.com
             sudo docker tag url:latest 665070863530.dkr.ecr.us-east-1.amazonaws.com/url_shortner:latest
