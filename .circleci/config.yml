@@ -40,6 +40,9 @@ jobs:
           command: |
             apk add --update docker openrc
             rc-update add docker boot
+            docker build -t docker-alpine .
+            docker run -it -v "/var/run/docker.sock:/var/run/docker.sock:rw" docker-alpine:latest /bin/sh
+
 
       - run:
           name: Sending Docker images to ECR
