@@ -45,15 +45,11 @@ jobs:
             tar -xz -C /tmp -f /tmp/docker-$VER.tgz
             mv /tmp/docker/* /usr/bin
 
-      - run:
-          name: Sending Docker images to ECR
-          command: |
-            su -
-            docker build -t url:latest -f Dockerfile-start .
-            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 665070863530.dkr.ecr.us-east-1.amazonaws.com
-            docker tag url:latest 665070863530.dkr.ecr.us-east-1.amazonaws.com/url_shortner:latest
-            docker push 665070863530.dkr.ecr.us-east-1.amazonaws.com/url_shortner:latest
-
+      - run: su -
+      - run: docker build -t url:latest -f Dockerfile-start .
+      - run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 665070863530.dkr.ecr.us-east-1.amazonaws.com
+      - run: docker tag url:latest 665070863530.dkr.ecr.us-east-1.amazonaws.com/url_shortner:latest
+      - run: docker push 665070863530.dkr.ecr.us-east-1.amazonaws.com/url_shortner:latest       
 
 workflows:
   version: 2
