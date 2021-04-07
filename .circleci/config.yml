@@ -13,7 +13,7 @@ jobs:
 
   deploy_master_app:
     docker:
-      - image: ubuntu-2004:202010-01
+      - image: ubuntu:20.04
     steps:
       - checkout
       - run:
