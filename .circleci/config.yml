@@ -13,15 +13,19 @@ jobs:
 
   deploy_master_app:
     docker:
-      - image: ubuntu:20.04
+      - image: node:11-alpine
     steps:
       - checkout
       - run:
           name: Installing AWS CLI
           command: |
-             apt-get update
-             apt install python3-pip
-             pip3 install awsebcli --upgrade
+             apk add --no-cache \
+                 python3 \
+                 py3-pip \
+             && pip3 install --upgrade pip \
+             && pip3 install \
+                awscli \
+             && rm -rf /var/cache/apk/*
 
       - run:
           name: Configuring AWS
@@ -29,6 +33,7 @@ jobs:
             aws configure set aws_access_key_id AKIAZVWKQASVBHOUKSNA
             aws configure set aws_secret_access_key 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
             aws configure set region us-east-1
+            aws --version
 
       - run:
           name: Sending Docker images to ECR
