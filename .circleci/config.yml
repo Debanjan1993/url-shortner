@@ -36,6 +36,7 @@ jobs:
             aws --version
 
       - run: apk add docker
+      - run: apk add openrc
       - run: apk update
       - run: rc-update add docker boot
       - run: service docker start
