@@ -40,7 +40,7 @@ jobs:
       - run: apk update
       - run: rc-update add docker boot
       # - run: service docker start
-      - run: service docker status  
+      # - run: service docker status  
          
       - run: apk add sudo
       # - run: service docker start
