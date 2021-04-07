@@ -9,4 +9,45 @@ jobs:
     steps:
       - checkout
       - run: npm install
-      - run: npm run tsc  
+      - run: npm run tsc
+
+  deploy_master_app:
+    docker:
+      - image: ubuntu-2004:202010-01
+    steps:
+      - checkout
+      - run:
+          name: Installing AWS CLI
+          command: |
+            sudo apt-get update
+            sudo apt install python3-pip
+            sudo pip3 install awsebcli --upgrade
+
+      - run:
+          name: Configuring AWS
+          command: |
+            aws configure set aws_access_key_id AKIAZVWKQASVBHOUKSNA
+            aws configure set aws_secret_access_key 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
+            aws configure set region us-east-1
+
+      - run:
+          name: Sending Docker images to ECR
+          command: |
+            sudo docker build -t url:latest -f Dockerfile-start .
+            aws ecr get-login-password --region us-east-1 | sudo docker login --username AWS --password-stdin 665070863530.dkr.ecr.us-east-1.amazonaws.com
+            sudo docker tag url:latest 665070863530.dkr.ecr.us-east-1.amazonaws.com/url_shortner:latest
+            sudo docker push 665070863530.dkr.ecr.us-east-1.amazonaws.com/url_shortner:latest
+
+
+workflows:
+  version: 2
+  ci:
+    jobs:
+      - build
+
+      - deploy_master_app:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
