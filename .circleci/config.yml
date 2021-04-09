@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  aws-ecr: circleci/aws-ecr@6.15.3
+
 workflows:
   version: 2
   ci:
@@ -26,19 +29,14 @@ jobs:
       - run: npm run tsc
 
   deploy_master_app:
-    orbs : 
-      aws-ecr: circleci/aws-ecr@6.15.3
     docker:
       - image: ubuntu:18.04
     steps:
       - checkout
-      - aws-ecr/deploy:
+      - aws-ecr/build-and-push-image:
           account-url: 665070863530.dkr.ecr.us-east-1.amazonaws.com
           aws-access-key-id: AKIAZVWKQASVBHOUKSNA
           aws-secret-access-key: 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
           dockerfile: Dockerfile-start
           region: us-east-1
           repo: url_shortner
-             
-
-
