@@ -38,5 +38,5 @@ jobs:
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
           dockerfile: Dockerfile-start
-          region: us-east-1
+          region: AWS_REGION
           repo: url_shortner
