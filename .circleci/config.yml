@@ -30,7 +30,7 @@ jobs:
 
   deploy_master_app:
     docker:
-      - image: ubuntu:18.04
+      - image: cimg/python:3.9.1
     steps:
       - checkout
       - aws-ecr/build-and-push-image:
