@@ -1,8 +1,5 @@
 version: 2.1
 
-orbs:
-  aws-ecr: circleci/aws-ecr@6.15.3
-
 workflows:
   version: 2
   ci:
@@ -29,6 +26,8 @@ jobs:
       - run: npm run tsc
 
   deploy_master_app:
+    orbs : 
+      aws-ecr: circleci/aws-ecr@6.15.3
     docker:
       - image: ubuntu:18.04
     steps:
