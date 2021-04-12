@@ -2,6 +2,7 @@ import redis, { RedisClient } from 'redis';
 import Redlock, { Lock } from 'redlock';
 import { redisClient } from './redisConnection';
 import config from 'config';
+import logger from 'pino';
 
 class RedisService {
     private redlock: Redlock
@@ -19,11 +20,11 @@ class RedisService {
     lock = async (key: string, ttl: number): Promise<Lock> => {
         try {
             key = `${config.get<string>("mode")}-${key}}`;
-            console.log(`Acquiring lock for key ${key}`);
+            logger().info(`Acquiring lock for key ${key}`);
             const redisLock: Lock = await this.redlock.lock(key, ttl);
             return redisLock;
         } catch (e) {
-            console.error(`Error occurred while acquiring redis lock ${e}`);
+            logger().error(`Error occurred while acquiring redis lock ${e}`);
             return undefined;
         }
     }
@@ -33,7 +34,7 @@ class RedisService {
             await lock.unlock;
             return true
         } catch (e) {
-            console.error(`Error while releasing lock for ${lock.resource}`);
+            logger().error(`Error while releasing lock for ${lock.resource}`);
             return false;
         }
     }

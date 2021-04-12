@@ -6,17 +6,20 @@ import { UserRepository } from '../repository/UserRepository';
 import { EmailObj } from '../customTypesDec/interfaceDec';
 import publishToQueue from '../queueService/publish';
 import moment from 'moment';
+import JobLogger from '../Logger';
 
 
 class UserProcess {
   private routingRoute: 'db_mail_users_test_key'
   private connection: Connection
+  private jobLogger: JobLogger
   constructor() {
     this.connection = getConnection();
+    this.jobLogger = new JobLogger('User Process');
   }
   run = async (user: UserMessage) => {
 
-    console.log(`User Process Job started for user ${user.email}`);
+   this.jobLogger.info(`User Process Job started for user ${user.email}`);
     const userRepository = this.connection.getCustomRepository(UserRepository);
     const linksRepository = this.connection.getCustomRepository(LinkRepository);
 
@@ -38,7 +41,7 @@ class UserProcess {
         await linksRepository.updateLinkStatus(link);
         linkArr.push(link.shortUrl);
       } else {
-        console.log('No Disable link')
+        this.jobLogger.info('No Disable link')
       }
     }))
 
@@ -47,13 +50,13 @@ class UserProcess {
       links: linkArr
     };
 
-    console.log(`Publishing message to email queue for username ${getUser.username}`);
+    this.jobLogger.info(`Publishing message to email queue for username ${getUser.username}`);
     const isSent = await publishToQueue(this.routingRoute, Buffer.from(JSON.stringify(emailObj)));
     if (!isSent) {
-      console.log(`Unable to put user ${emailObj.email} in the email queue`);
+      this.jobLogger.error(`Unable to put user ${emailObj.email} in the email queue`);
     }
 
-    console.log(`User Process Job ended for user ${user.email}`);
+    this.jobLogger.info(`User Process Job ended for user ${user.email}`);
   }
 }
 

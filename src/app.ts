@@ -10,6 +10,7 @@ import config from 'config';
 import pg from 'pg';
 import connectPgSimple from 'connect-pg-simple';
 import { connectToQueueServer } from './queueService/queueConnection';
+import logger from 'pino';
 
 
 (async function () {
@@ -31,7 +32,7 @@ import { connectToQueueServer } from './queueService/queueConnection';
     app.use(express.static(path.join(__dirname + '../../public/')));
     app.use(session({
         store: new pgStore({
-          pool: pgPool
+            pool: pgPool
         }),
         secret: config.get<string>("sessionKey"),
         resave: false,
@@ -43,6 +44,6 @@ import { connectToQueueServer } from './queueService/queueConnection';
     const route = new Route();
     route.init(app);
 
-    app.listen(port, () => console.log(`App running on PORT : ${port}`));
+    app.listen(port, () => logger().info(`App running on PORT : ${port}`));
 
 })();

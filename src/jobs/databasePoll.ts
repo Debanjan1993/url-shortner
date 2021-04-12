@@ -2,14 +2,18 @@ import { Connection, getConnection } from 'typeorm';
 import { Users } from '../entity/Users/Users';
 import { UserRepository } from '../repository/UserRepository';
 import publishToQueue from '../queueService/publish';
+import JobLogger from '../Logger';
 
 class DatabasePoll {
     routingRoute: 'db_poll_users_test_key'
     connection: Connection
+    jobLogger: JobLogger
     constructor() {
         this.connection = getConnection();
+        this.jobLogger = new JobLogger('Database Poll Job');
     }
     run = async () => {
+        this.jobLogger.info(`Database Poll Job started`);
         const userRepository = this.connection.getCustomRepository(UserRepository);
 
         const freeUserCount = await userRepository.getFreeUserCount();
@@ -28,10 +32,10 @@ class DatabasePoll {
             email: user.email,
             username: user.username
         }
-        console.log(`Publishing message to queue for username ${obj.username}`);
+        this.jobLogger.info(`Publishing message to queue for username ${obj.username}`);
         const isSent = await publishToQueue(this.routingRoute, Buffer.from(JSON.stringify(obj)));
         if (!isSent) {
-            console.log(`Unable to put user ${obj.email} in the queue`);
+            this.jobLogger.error(`Unable to put user ${obj.email} in the queue`);
         }
     }
 

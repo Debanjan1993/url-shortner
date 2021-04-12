@@ -2,7 +2,7 @@ import { CronJob } from 'cron';
 import DatabasePoll from './jobs/databasePoll';
 import connectToDb from './postgresConnection';
 import { connectToQueueServer } from './queueService/queueConnection';
-
+import logger from 'pino';
 
 (async function () {
 
@@ -13,7 +13,7 @@ import { connectToQueueServer } from './queueService/queueConnection';
     const job = new CronJob('*/10 * * * * *', async () => {
         await new DatabasePoll().run();
     }, () => {
-        console.log(`Database Poll Job Completed`)
+        logger().info(`Database Poll Job Completed`);
     }, true)
 
     job.start();

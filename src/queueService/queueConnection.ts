@@ -1,4 +1,5 @@
 import amqb from 'amqplib';
+import logger from 'pino'
 
 
 let ch: amqb.Channel = null;
@@ -9,7 +10,7 @@ async function connectToQueueServer() {
         const channel = await queueConnection.createChannel();
         ch = channel;
     } catch (e) {
-        console.error(e);
+        logger().error(e);
     }
 }
 

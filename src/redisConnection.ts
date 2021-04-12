@@ -1,5 +1,6 @@
 import redis, { RedisClient } from 'redis';
 import config from 'config';
+import logger from 'pino';
 
 let redisClient: RedisClient = null;
 const connectRedisDb = async () => {
@@ -8,12 +9,12 @@ const connectRedisDb = async () => {
     })
 
     client.on("error", err => {
-        console.error(err);
+        logger().error(err);
     })
 
     client.on('connect', () => {
         redisClient = client;
-        console.log(`Connected to the redis DB`);
+        logger().info(`Connected to the redis DB`);
     })
 }
 
