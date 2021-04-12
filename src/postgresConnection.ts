@@ -1,6 +1,7 @@
 import { createConnection, Connection } from 'typeorm';
 import config from 'config';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import logger from 'pino';
 
 
 async function connectToDb() {
@@ -20,7 +21,7 @@ async function connectToDb() {
         ]
     };
 
-    const connection = createConnection(connectionOptions).then(x => console.log(`Connected to DB successfully`));
+    const connection = createConnection(connectionOptions).then(x => logger().info(`Connected to DB successfully`));
 
 }
 

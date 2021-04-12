@@ -3,6 +3,7 @@ import connectToDb from './postgresConnection';
 import { connectToQueueServer } from './queueService/queueConnection';
 import ConsumeProcessor from './queueService/consumeProcessor';
 import { enableTransporter } from './mailTransporter';
+import logger from 'pino';
 
 (async function () {
 
@@ -14,13 +15,13 @@ import { enableTransporter } from './mailTransporter';
     new CronJob('*/20 * * * * *', async () => {
         await new ConsumeProcessor().userMail();
     }, () => {
-        console.log(`User Mail Job Completed`)
+        logger().info(`User Mail Job Completed`)
     }, true)
 
     new CronJob('*/20 * * * * *', async () => {
         await new ConsumeProcessor().confirmationMail();
     }, () => {
-        console.log(`Confirmation Mail Job Completed`)
+        logger().info(`Confirmation Mail Job Completed`)
     }, true)
 
 })();

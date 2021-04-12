@@ -7,16 +7,19 @@ import moment from 'moment';
 import { LinkRepository } from '../repository/LinkRepository'
 import { Connection, getConnection } from 'typeorm';
 import { UserRepository } from '../repository/UserRepository';
+import JobLogger from '../Logger';
 
 class LinksController {
     connection: Connection;
+    jobLogger: JobLogger;
     constructor() {
         this.connection = getConnection();
+        this.jobLogger = new JobLogger('Links Controller');
     }
 
     createLinks = async (req: express.Request, res: express.Response) => {
 
-        console.log(`Received request`);
+        this.jobLogger.info(`Received request`);
         const { longUrl } = req.body;
         const baseUrl = config.get<string>('baseUrl');
 
@@ -50,7 +53,7 @@ class LinksController {
             });
 
         } catch (e) {
-            console.error(`Exception while performing db operations ${e.message}`)
+            this.jobLogger.error(`Exception while performing db operations ${e.message}`, e)
             return res.status(500).json('Interval Server Error');
         }
 
@@ -71,7 +74,7 @@ class LinksController {
             res.redirect(originalLink.longUrl);
 
         } catch (e) {
-            console.error(`Exception while performing db operations ${e.message}`)
+            this.jobLogger.error(`Exception while performing db operations ${e.message}`, e)
             return res.status(500).json('Interval Server Error');
         }
 
@@ -101,7 +104,7 @@ class LinksController {
             res.status(200).json('Link deleted');
 
         } catch (e) {
-            console.error(`Exception while deleting link from DB ${e.message}`);
+            this.jobLogger.error(`Exception while deleting link from DB ${e.message}`, e);
             return res.status(500).json('Internal Server Error');
         }
     }

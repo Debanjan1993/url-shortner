@@ -2,17 +2,18 @@ import { Connection, getConnection } from "typeorm";
 import { EmailObj, ConfirmationEmail } from '../customTypesDec/interfaceDec';
 import { transporter } from '../mailTransporter';
 import config from 'config';
-
-
+import JobLogger from "../Logger";
 
 class EmailJob {
     private connection: Connection
+    private jobLogger: JobLogger
     constructor() {
         this.connection = getConnection();
+        this.jobLogger = new JobLogger('Email Job');
     }
 
     run = async (emailObj: EmailObj) => {
-        console.log(`Link Deactivatation email job started for user ${emailObj.email}`);
+        this.jobLogger.info(`Link Deactivatation email job started for user ${emailObj.email}`);
         const email = emailObj.email
         const links = emailObj.links.join(',')
         const url = `${config.get<string>("baseUrl")}login`
@@ -27,17 +28,17 @@ class EmailJob {
 
         })
 
-        console.log(info.messageId);
-        console.log(`Link Deactivatation email job ended for user ${emailObj.email}`);
+        this.jobLogger.info(info.messageId);
+        this.jobLogger.info(`Link Deactivatation email job ended for user ${emailObj.email}`);
     }
 
     confirmationMail = async (emailObj: ConfirmationEmail) => {
-        console.log(`Cofirmation email job started for user ${emailObj.email}`);
+        this.jobLogger.info(`Cofirmation email job started for user ${emailObj.email}`);
         const email = emailObj.email;
         const code = emailObj.code;
         const url = `${config.get<string>("baseUrl")}confirmation/${code}`;
 
-        console.log(`Sending mail to user ${email}`);
+        this.jobLogger.info(`Sending mail to user ${email}`);
         const info = await transporter.sendMail({
 
             from: '"URL Shortner Pvt Ltd" <debanjan.dey999@gmail.com>',
@@ -48,8 +49,8 @@ class EmailJob {
 
         })
 
-        console.log(info.messageId);
-        console.log(`Cofirmation email job ended for user ${emailObj.email}`);
+        this.jobLogger.info(info.messageId);
+        this.jobLogger.info(`Cofirmation email job ended for user ${emailObj.email}`);
     }
 
 }

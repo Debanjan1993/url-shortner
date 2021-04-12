@@ -10,14 +10,17 @@ import config from 'config';
 import CryptoJS from 'crypto-js';
 import publishToQueue from '../queueService/publish';
 import { ConfirmationEmail } from '../customTypesDec/interfaceDec';
+import JobLogger from '../Logger';
 
 export default class UsersController {
     connection: Connection;
     crypto: Crypto;
     routingRoute: 'db_confirmation_mail_test_key';
+    jobLogger: JobLogger;
     constructor() {
         this.connection = getConnection();
         this.crypto = new Crypto();
+        this.jobLogger = new JobLogger('User Controller');
     }
 
     addUser = async (req: express.Request, res: express.Response) => {
@@ -62,7 +65,7 @@ export default class UsersController {
         await userRepository.save(user);
 
         const encryptedEmail = await this.encryptEmail(user.email);
-        console.log(`Publishing message to confirmation email queue for email ${user.email}`);
+        this.jobLogger.info(`Publishing message to confirmation email queue for email ${user.email}`);
 
         const emailObj: ConfirmationEmail = {
             email: user.email,
@@ -71,7 +74,7 @@ export default class UsersController {
 
         const isSent = publishToQueue(this.routingRoute, Buffer.from(JSON.stringify(emailObj)));
         if (!isSent) {
-            console.log(`Unable to put user ${emailObj.email} in the confirmation email queue`);
+            this.jobLogger.error(`Unable to put user ${emailObj.email} in the confirmation email queue`);
         }
         return res.status(201).json('User created');
 
@@ -109,7 +112,7 @@ export default class UsersController {
 
         jwt.sign({ jwtbody: jwtbody }, privateKey, (err: any, token: any) => {
             if (err) {
-                console.log(`Unable to generate token ${err}`)
+                this.jobLogger.error(`Unable to generate token ${err}`)
                 return res.status(500).json('Internal Server Error');
             }
             else {
@@ -123,7 +126,7 @@ export default class UsersController {
     logoutUser = async (req: express.Request, res: express.Response) => {
         req.session.destroy(err => {
             if (err) {
-                console.log(`Error logging out ${err}`);
+                this.jobLogger.error(`Error logging out ${err}`);
                 return res.status(500).json('Internal Server Error');
             } else {
                 return res.status(200).json(`Logged out successfully`);
