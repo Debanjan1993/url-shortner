@@ -1,4 +1,4 @@
-import config from 'config';
+const config = require('config');
 
 const ormconfig = {
     "type": "postgres",
@@ -26,4 +26,4 @@ const ormconfig = {
     }
 }
 
-export default ormconfig;
+module.exports = ormconfig

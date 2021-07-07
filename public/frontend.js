@@ -1,8 +1,8 @@
 function sendSignUpData() {
     const personName = document.querySelector('#name').value;
-    const email = document.querySelector('#email').value;
+    const email = document.querySelector('#username').value;
     const password = document.querySelector('#password').value;
-    const password2 = document.querySelector('#password2').value;
+    const password2 = document.querySelector('#confirmPassword').value;
     const signupbtn = document.querySelector('#signupbtn');
 
     const obj = {

@@ -7,7 +7,7 @@
     "password": "gWzbLSphWPcrJqEV",
     "db": "url-shortner-prod",
     "dropSchema": false,
-    "synchronize": true,
+    "synchronize": false,
     "baseUrl": "http://localhost:3500/",
     "privateKey": "lFOnetwKBsyPAxEv",
     "sessionKey": "xWaLGzbtmbsbLxxF",

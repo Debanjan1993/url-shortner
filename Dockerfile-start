@@ -7,6 +7,9 @@ COPY . /app
 RUN npm install
 RUN npm run tsc
 
+ENV NODE_ENV=production
+RUN npm run migrate-db
+
 FROM node:12-alpine AS DEPENDENCY_IMAGE
 
 WORKDIR /app
