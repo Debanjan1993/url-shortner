@@ -7,7 +7,7 @@
     "password": "asdf",
     "db": "url-shortner-dev",
     "dropSchema": false,
-    "synchronize": true,
+    "synchronize": false,
     "baseUrl": "http://localhost:3500/",
     "privateKey": "lFOnetwKBsyPAxEv",
     "sessionKey": "xWaLGzbtmbsbLxxF",

@@ -13,9 +13,9 @@ async function connectToDb() {
         username: config.get<string>('user'),
         password: config.get<string>('password'),
         database: config.get<string>('db'),
-        synchronize: true,
+        synchronize: config.get<boolean>('synchronize'),
         logging: false,
-        dropSchema: false,
+        dropSchema: config.get<boolean>('dropSchema'),
         entities: [
             "./dist/entity/**/*.js"
         ]

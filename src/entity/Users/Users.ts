@@ -27,6 +27,9 @@ export class Users {
     @Column()
     isVerified: boolean = false
 
+    @Column({ nullable: true })
+    test: string
+
     @OneToMany(type => Links, links => links.user)
     links: Links[];
 
