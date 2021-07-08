@@ -15,6 +15,13 @@ workflows:
           filters:
             branches:
               only: master
+      
+      - deploy_master_emailuserapp:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master        
 
 jobs:
   build:
@@ -41,3 +48,19 @@ jobs:
           region: AWS_REGION
           repo: url_shortner
           setup-remote-docker: true
+  
+  deploy_master_emailuserapp:
+    docker:
+      - image: cimg/python:3.9.1
+    steps:
+      - checkout
+      - aws-ecr/build-and-push-image:
+          account-url: AWS_ECR_ACCOUNT_URL
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          dockerfile: Dockerfile-emailuser
+          region: AWS_REGION
+          repo: url_shortner
+          setup-remote-docker: true        
+  
+          

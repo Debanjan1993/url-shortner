@@ -10,7 +10,7 @@ import JobLogger from '../Logger';
 
 
 class UserProcess {
-  private routingRoute: 'db_mail_users_test_key'
+  private routingRoute = 'db_mail_users_test_queue'
   private connection: Connection
   private jobLogger: JobLogger
   constructor() {
@@ -19,7 +19,7 @@ class UserProcess {
   }
   run = async (user: UserMessage) => {
 
-   this.jobLogger.info(`User Process Job started for user ${user.email}`);
+    this.jobLogger.info(`User Process Job started for user ${user.email}`);
     const userRepository = this.connection.getCustomRepository(UserRepository);
     const linksRepository = this.connection.getCustomRepository(LinkRepository);
 
