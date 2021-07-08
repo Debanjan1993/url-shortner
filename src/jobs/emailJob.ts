@@ -45,7 +45,7 @@ class EmailJob {
             to: email,
             subject: `Account Confirmation Mail`,
             text: `Please click on the link below to confirm your account`,
-            html: `<a href="${url}">Link</a>`,
+            html: `<head>Please click on the link below to confirm your account with URL Shortner Pvt Ltd<head><br><a href="${url}">Link</a>`,
 
         })
 

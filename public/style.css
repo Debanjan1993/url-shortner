@@ -44,7 +44,8 @@ input {
     outline: none;
 }
 
-label {
+
+/* label {
     position: absolute;
     top: 50%;
     left: 5px;
@@ -53,12 +54,13 @@ label {
     font-size: 16px;
     pointer-events: none;
     transition: ease 0.5s;
-}
+} */
 
-input:~label {
+
+/* input:~label {
     top: -5px;
     color: #2691d9
-}
+} */
 
 input[type="submit"] {
     width: 100%;
@@ -83,4 +85,8 @@ input[type="submit"] {
 a {
     text-decoration: none;
     color: #2691d9;
+}
+
+input::-webkit-input-placeholder {
+    opacity: 0.5;
 }

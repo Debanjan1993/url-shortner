@@ -5,7 +5,7 @@ import publishToQueue from '../queueService/publish';
 import JobLogger from '../Logger';
 
 class DatabasePoll {
-    routingRoute: 'db_poll_users_test_key'
+    routingRoute = 'db_poll_users_test_queue'
     connection: Connection
     jobLogger: JobLogger
     constructor() {

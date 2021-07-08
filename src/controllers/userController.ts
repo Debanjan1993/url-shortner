@@ -15,7 +15,7 @@ import JobLogger from '../Logger';
 export default class UsersController {
     connection: Connection;
     crypto: Crypto;
-    routingRoute: 'db_confirmation_mail_test_key';
+    routingRoute = 'db_confirmation_mail_test_queue';
     jobLogger: JobLogger;
     constructor() {
         this.connection = getConnection();
