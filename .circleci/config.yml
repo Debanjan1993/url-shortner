@@ -60,7 +60,7 @@ jobs:
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
           dockerfile: Dockerfile-emailuser
           region: AWS_REGION
-          repo: url_shortner
+          repo: url_shortner_email
           setup-remote-docker: true        
   
           
