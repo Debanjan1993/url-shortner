@@ -1,6 +1,6 @@
 {
     "mode": "production",
-    "host": "ec2-18-207-207-114.compute-1.amazonaws.com",
+    "host": "url-shortner-prod.c1qcbl6syqpp.us-east-1.rds.amazonaws.com",
     "port": "5432",
     "user": "postgres",
     "entities": "./dist/entity/**/*.js",
