@@ -1,4 +1,13 @@
-function sendSignUpData() {
+import obj from './config.js';
+
+let url;
+
+document.addEventListener('DOMContentLoaded', async event => {
+    url = obj.url;
+})
+
+
+window.sendSignUpData = function sendSignUpData() {
     const personName = document.querySelector('#name').value;
     const email = document.querySelector('#username').value;
     const password = document.querySelector('#password').value;
@@ -12,7 +21,7 @@ function sendSignUpData() {
         password2
     }
 
-    fetch('http://localhost:3500/api/signup', {
+    fetch(`${url}/api/signup`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -29,7 +38,7 @@ function sendSignUpData() {
 
 }
 
-function login() {
+window.login = function login() {
     const username = document.querySelector('#loginEmail').value
     const password = document.querySelector('#loginPassword').value
 
@@ -38,7 +47,7 @@ function login() {
         password
     }
 
-    fetch('http://localhost:3500/api/login', {
+    fetch(`${url}/api/login`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',

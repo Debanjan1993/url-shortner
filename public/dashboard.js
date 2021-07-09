@@ -1,6 +1,11 @@
-function logout() {
+import body from './config.js';
+
+let url;
+
+
+window.logout = function logout() {
     delete_cookie('authorization');
-    fetch('http://localhost:3500/api/logout', {
+    fetch(`${url}/api/logout`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -15,7 +20,8 @@ const delete_cookie = (name) => {
 };
 
 document.addEventListener('DOMContentLoaded', async event => {
-    const res = await fetch('http://localhost:3500/api/userDetails', {
+    url = body.url;
+    const res = await fetch(`${url}/api/userDetails`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -60,7 +66,7 @@ async function deleteLink(link) {
     const obj = {
         link
     }
-    const res = await fetch('http://localhost:3500/api/deleteLink', {
+    const res = await fetch(`${url}/api/deleteLink`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -77,12 +83,12 @@ async function deleteLink(link) {
 
 }
 
-async function addLink() {
+window.addLink = async function addLink() {
     const inputVal = document.querySelector('#inputMain').value;
     const obj = {
         longUrl: inputVal
     }
-    const res = await fetch('http://localhost:3500/shorten', {
+    const res = await fetch(`${url}/shorten`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -97,10 +103,10 @@ async function addLink() {
     }
 }
 
-function home() {
+window.home = function home() {
     window.location.href = '/dashboard';
 }
 
-function account() {
+window.account = function account() {
     window.location.href = '/account';
 }

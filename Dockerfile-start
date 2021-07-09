@@ -29,6 +29,8 @@ COPY --from=DEPENDENCY_IMAGE /app/public ./public
 COPY --from=DEPENDENCY_IMAGE /app/package.json .
 COPY --from=DEPENDENCY_IMAGE /app/ormconfig.js .
 
+RUN echo "export default { \"url\": \"http://url-shortner-alb-1553086196.us-east-1.elb.amazonaws.com\" }" >  ./public/config.js
+
 EXPOSE 3500
 
 ENTRYPOINT npm run prod-start
