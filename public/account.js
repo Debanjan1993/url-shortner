@@ -1,10 +1,14 @@
-function home() {
+import body from './config.js';
+
+let url;
+
+window.home = function home() {
     window.location.href = '/dashboard';
 }
 
-function logout() {
+window.logout = function logout() {
     delete_cookie('authorization');
-    fetch('http://localhost:3500/api/logout', {
+    fetch(`${url}/api/logout`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -15,7 +19,8 @@ function logout() {
 
 
 document.addEventListener('DOMContentLoaded', async event => {
-    const res = await fetch('http://localhost:3500/api/userDetails', {
+    url = body.url;
+    const res = await fetch(`${url}/api/userDetails`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -33,7 +38,7 @@ document.addEventListener('DOMContentLoaded', async event => {
     emailElem.value = obj.email;
 })
 
-async function updateInfo() {
+window.updateInfo = async function updateInfo() {
     const name = document.querySelector('#inputName').value;
     const email = document.querySelector('#inputEmail').value;
     const password = document.querySelector('#inputSub').value;
@@ -46,7 +51,7 @@ async function updateInfo() {
         password2
     }
 
-    const res = await fetch('http://localhost:3500/api/updateInfo', {
+    const res = await fetch(`${url}/api/updateInfo`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
