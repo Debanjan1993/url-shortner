@@ -8,7 +8,7 @@
     "db": "url-shortner-prod",
     "dropSchema": false,
     "synchronize": false,
-    "baseUrl": "http://localhost:3500/",
+    "baseUrl": "http://url-shortner-alb-1553086196.us-east-1.elb.amazonaws.com/",
     "privateKey": "lFOnetwKBsyPAxEv",
     "sessionKey": "xWaLGzbtmbsbLxxF",
     "emailUsername": "debanjan.dey999@gmail.com",
