@@ -13,16 +13,20 @@ class DatabasePoll {
         this.jobLogger = new JobLogger('Database Poll Job');
     }
     run = async () => {
-        this.jobLogger.info(`Database Poll Job started`);
-        const userRepository = this.connection.getCustomRepository(UserRepository);
+        try {
+            this.jobLogger.info(`Database Poll Job started`);
+            const userRepository = this.connection.getCustomRepository(UserRepository);
 
-        const freeUserCount = await userRepository.getFreeUserCount();
+            const freeUserCount = await userRepository.getFreeUserCount();
 
-        for (let i = 0; i < freeUserCount; i = i + 50) {
-            const users = await userRepository.getFreeUsers(i, 50);
-            await Promise.all(users.map(async user => {
-                await this.sendMessagetoQueue(user);
-            }));
+            for (let i = 0; i < freeUserCount; i = i + 50) {
+                const users = await userRepository.getFreeUsers(i, 50);
+                await Promise.all(users.map(async user => {
+                    await this.sendMessagetoQueue(user);
+                }));
+            }
+        } catch (err) {
+            this.jobLogger.error(`Exception : ${err}`);
         }
 
     }

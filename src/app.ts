@@ -15,35 +15,40 @@ import logger from 'pino';
 
 (async function () {
 
-    const app = express();
-    const port = process.env.PORT || 3500;
+    try {
 
-    const pgPool = new pg.Pool({
-        host: config.get<string>("host"),
-        user: config.get<string>("user"),
-        password: config.get<string>("password"),
-        port: config.get<number>("port"),
-        database: config.get<string>("db")
-    })
-    const pgStore = connectPgSimple(session);
+        const app = express();
+        const port = process.env.PORT || 3500;
 
-    app.use(cookieParser())
-    app.use(bodyParser.json());
-    app.use(express.static(path.join(__dirname + '../../public/')));
-    app.use(session({
-        store: new pgStore({
-            pool: pgPool
-        }),
-        secret: config.get<string>("sessionKey"),
-        resave: false,
-        saveUninitialized: false,
-    }));
+        const pgPool = new pg.Pool({
+            host: config.get<string>("host"),
+            user: config.get<string>("user"),
+            password: config.get<string>("password"),
+            port: config.get<number>("port"),
+            database: config.get<string>("db")
+        })
+        const pgStore = connectPgSimple(session);
 
-    await connectToQueueServer();
-    await connectToDb();
-    const route = new Route();
-    route.init(app);
+        app.use(cookieParser())
+        app.use(bodyParser.json());
+        app.use(express.static(path.join(__dirname + '../../public/')));
+        app.use(session({
+            store: new pgStore({
+                pool: pgPool
+            }),
+            secret: config.get<string>("sessionKey"),
+            resave: false,
+            saveUninitialized: false,
+        }));
 
-    app.listen(port, () => logger().info(`App running on PORT : ${port}`));
+        await connectToQueueServer();
+        await connectToDb();
+        const route = new Route();
+        route.init(app);
+
+        app.listen(port, () => logger().info(`App running on PORT : ${port}`));
+    } catch (err) {
+        logger().error(`Exception : ${err}`);
+    }
 
 })();
