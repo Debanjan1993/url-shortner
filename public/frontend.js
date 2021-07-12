@@ -4,6 +4,8 @@ let url;
 
 document.addEventListener('DOMContentLoaded', async event => {
     url = obj.url;
+    toastr.options.timeOut = 4 * 1000;
+    toastr.options.showMethod = 'slideDown';
 })
 
 
@@ -32,7 +34,7 @@ window.sendSignUpData = function sendSignUpData() {
         if (res.status === 201) {
             window.location.href = '/login'
         } else {
-            res.json().then(json => alert(json));
+            res.json().then(json => toastr.error(json));
         }
     });
 
@@ -61,7 +63,7 @@ window.login = function login() {
                 window.location.href = '/dashboard';
             });
         } else {
-            res.json().then(json => alert(json));
+            res.json().then(json => toastr.error(json));
         }
     });
 }

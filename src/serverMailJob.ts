@@ -26,7 +26,7 @@ import logger from 'pino';
         }, null, true)
 
     } catch (err) {
-        logger().error(`Exception : ${err}`);
+        logger().error(`Exception while running the Mail Job : ${err}`);
     }
 
 })();

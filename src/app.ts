@@ -48,7 +48,7 @@ import logger from 'pino';
 
         app.listen(port, () => logger().info(`App running on PORT : ${port}`));
     } catch (err) {
-        logger().error(`Exception : ${err}`);
+        logger().error(`Exception while running the application: ${err}`);
     }
 
 })();

@@ -19,7 +19,7 @@ import logger from 'pino';
 
         job.start();
     } catch (err) {
-        logger().error(`Exception : ${err}`);
+        logger().error(`Exception while running the DatabasePoll Job : ${err}`);
     }
 
 })();
