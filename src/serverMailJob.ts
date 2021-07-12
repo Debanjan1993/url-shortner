@@ -7,21 +7,26 @@ import logger from 'pino';
 
 (async function () {
 
-    await connectToQueueServer();
-    await connectToDb();
-    await enableTransporter();
+    try {
+        await connectToQueueServer();
+        await connectToDb();
+        await enableTransporter();
 
 
-    new CronJob('*/20 * * * * *', async () => {
-        await new ConsumeProcessor().userMail();
-    }, () => {
-        logger().info(`User Mail Job Completed`)
-    }, true)
+        new CronJob('*/20 * * * * *', async () => {
+            logger().info(`User Mail Job Started`);
+            await new ConsumeProcessor().userMail();
+            logger().info(`User Mail Job Completed`);
+        }, null, true)
 
-    new CronJob('*/20 * * * * *', async () => {
-        await new ConsumeProcessor().confirmationMail();
-    }, () => {
-        logger().info(`Confirmation Mail Job Completed`)
-    }, true)
+        new CronJob('*/20 * * * * *', async () => {
+            logger().info(`Confirmation Mail Job Started`);
+            await new ConsumeProcessor().confirmationMail();
+            logger().info(`Confirmation Mail Job Completed`);
+        }, null, true)
+
+    } catch (err) {
+        logger().error(`Exception while running the Mail Job : ${err}`);
+    }
 
 })();

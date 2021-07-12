@@ -6,16 +6,20 @@ import logger from 'pino';
 
 (async function () {
 
-    await connectToQueueServer();
-    await connectToDb();
+    try {
+        await connectToQueueServer();
+        await connectToDb();
 
-    //0 */5 * * * *
-    const job = new CronJob('*/10 * * * * *', async () => {
-        await new DatabasePoll().run();
-    }, () => {
-        logger().info(`Database Poll Job Completed`);
-    }, true)
+        //0 */5 * * * *
+        const job = new CronJob('*/10 * * * * *', async () => {
+            logger().info(`Database Poll Job Started`);
+            await new DatabasePoll().run();
+            logger().info(`Database Poll Job Completed`);
+        }, null, true)
 
-    job.start();
+        job.start();
+    } catch (err) {
+        logger().error(`Exception while running the DatabasePoll Job : ${err}`);
+    }
 
 })();

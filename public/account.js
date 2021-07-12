@@ -19,6 +19,8 @@ window.logout = function logout() {
 
 
 document.addEventListener('DOMContentLoaded', async event => {
+    toastr.options.timeOut = 4 * 1000;
+    toastr.options.showMethod = 'slideDown';
     url = body.url;
     const res = await fetch(`${url}/api/userDetails`, {
         method: 'GET',
@@ -63,7 +65,7 @@ window.updateInfo = async function updateInfo() {
     if (res.status === 200) {
         logout();
     } else {
-        res.json().then(obj => alert(obj));
+        res.json().then(obj => toastr.error(obj));
     }
 
 }

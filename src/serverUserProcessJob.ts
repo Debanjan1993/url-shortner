@@ -5,16 +5,19 @@ import ConsumeProcessor from './queueService/consumeProcessor';
 import logger from 'pino';
 
 (async function () {
+    try {
+        await connectToQueueServer();
+        await connectToDb();
 
-    await connectToQueueServer();
-    await connectToDb();
+        const job = new CronJob('*/20 * * * * *', async () => {
+            logger().info(`User Process Job Started`);
+            await new ConsumeProcessor().userProcess();
+            logger().info(`User Process Job Completed`);
+        }, null, true)
 
-    const job = new CronJob('*/20 * * * * *', async () => {
-        await new ConsumeProcessor().userProcess();
-    }, () => {
-        logger().info(`User Process Job Completed`);
-    }, true)
-
-    job.start();
+        job.start();
+    } catch (err) {
+        logger().error(`Exception while running the User Process Job : ${err}`);
+    }
 
 })();

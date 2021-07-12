@@ -18,46 +18,50 @@ class UserProcess {
     this.jobLogger = new JobLogger('User Process');
   }
   run = async (user: UserMessage) => {
+    try {
+      this.jobLogger.info(`User Process Job started for user ${user.email}`);
+      const userRepository = this.connection.getCustomRepository(UserRepository);
+      const linksRepository = this.connection.getCustomRepository(LinkRepository);
 
-    this.jobLogger.info(`User Process Job started for user ${user.email}`);
-    const userRepository = this.connection.getCustomRepository(UserRepository);
-    const linksRepository = this.connection.getCustomRepository(LinkRepository);
+      const getUser = await userRepository.getUserByEmail(user.email);
+      const links = await linksRepository.getLinksByUser(getUser);
 
-    const getUser = await userRepository.getUserByEmail(user.email);
-    const links = await linksRepository.getLinksByUser(getUser);
+      const linkArr: string[] = [];
+      await Promise.all(links[0].map(async link => {
 
-    const linkArr: string[] = [];
-    await Promise.all(links[0].map(async link => {
+        const now = moment().format("DD-MM-YYYY");
+        const linkCreated = link.date;
 
-      const now = moment().format("DD-MM-YYYY");
-      const linkCreated = link.date;
+        const momentNow = moment(now, 'DD-MM-YYYY');
+        const momentLinkCreated = moment(linkCreated, 'DD-MM-YYYY')
 
-      const momentNow = moment(now, 'DD-MM-YYYY');
-      const momentLinkCreated = moment(linkCreated, 'DD-MM-YYYY')
+        const diffDays = momentNow.diff(momentLinkCreated, "days");
+        if (diffDays > 30) {
+          link.isDisabled = true;
+          await linksRepository.updateLinkStatus(link);
+          linkArr.push(link.shortUrl);
+        } else {
+          this.jobLogger.info('No Disable link')
+        }
+      }))
 
-      const diffDays = momentNow.diff(momentLinkCreated, "days");
-      if (diffDays > 30) {
-        link.isDisabled = true;
-        await linksRepository.updateLinkStatus(link);
-        linkArr.push(link.shortUrl);
-      } else {
-        this.jobLogger.info('No Disable link')
+      const emailObj: EmailObj = {
+        email: user.email,
+        links: linkArr
+      };
+
+      this.jobLogger.info(`Publishing message to email queue for username ${getUser.username}`);
+      const isSent = await publishToQueue(this.routingRoute, Buffer.from(JSON.stringify(emailObj)));
+      if (!isSent) {
+        this.jobLogger.error(`Unable to put user ${emailObj.email} in the email queue`);
       }
-    }))
 
-    const emailObj: EmailObj = {
-      email: user.email,
-      links: linkArr
-    };
-
-    this.jobLogger.info(`Publishing message to email queue for username ${getUser.username}`);
-    const isSent = await publishToQueue(this.routingRoute, Buffer.from(JSON.stringify(emailObj)));
-    if (!isSent) {
-      this.jobLogger.error(`Unable to put user ${emailObj.email} in the email queue`);
+      this.jobLogger.info(`User Process Job ended for user ${user.email}`);
+    } catch (err) {
+      this.jobLogger.error(`Exception : ${err}`);
     }
-
-    this.jobLogger.info(`User Process Job ended for user ${user.email}`);
   }
+
 }
 
 export default UserProcess;

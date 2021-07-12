@@ -20,6 +20,8 @@ const delete_cookie = (name) => {
 };
 
 document.addEventListener('DOMContentLoaded', async event => {
+    toastr.options.timeOut = 4 * 1000;
+    toastr.options.showMethod = 'slideDown';
     url = body.url;
     const res = await fetch(`${url}/api/userDetails`, {
         method: 'GET',
@@ -76,7 +78,7 @@ async function deleteLink(link) {
     });
 
     if (res.status !== 200) {
-        res.json().then(obj => alert(obj));
+        res.json().then(obj => toastr.error(obj));
     } else {
         location.reload();
     }
@@ -97,7 +99,7 @@ window.addLink = async function addLink() {
         body: JSON.stringify(obj)
     });
     if (res.status !== 200) {
-        res.json().then(obj => alert(obj));
+        res.json().then(obj => toastr.error(obj));
     } else {
         location.reload();
     }
